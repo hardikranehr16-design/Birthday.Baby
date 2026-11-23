@@ -560,6 +560,418 @@ bottom: 17%;
 }
 
         /* =========================================================
+           MAIN BUTTERFLY
+        ========================================================= */
+
+        #butterfly {
+            position: absolute;
+            width: clamp(42px, 5.2vw, 68px);
+            left: -12%;
+            top: 45%;
+            z-index: 40;
+            cursor: pointer;
+            opacity: 0;
+            transform-origin: center;
+            transform: rotate(-8deg);
+            filter: drop-shadow(0 0 7px rgba(255,255,255,.28));
+            transition:
+                left var(--flight-time, 5s) cubic-bezier(.42,0,.25,1),
+                top var(--flight-time, 5s) cubic-bezier(.42,0,.25,1),
+                transform 1.2s ease,
+                opacity 1s ease,
+                filter 1s ease;
+            touch-action: manipulation;
+            will-change: left, top, transform;
+        }
+
+        #butterfly.visible { opacity: 1; }
+
+        #butterfly img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transform-origin: 50% 50%;
+            animation: mainWingBeat .28s ease-in-out infinite alternate;
+            backface-visibility: visible;
+        }
+
+        @keyframes mainWingBeat {
+            from { transform: perspective(180px) rotateY(-32deg) scaleX(.88) scaleY(.96); }
+            to   { transform: perspective(180px) rotateY(32deg) scaleX(1.04) scaleY(1.03); }
+        }
+
+        #butterfly:hover { filter: drop-shadow(0 0 18px rgba(255,220,255,.8)); }
+
+        #butterfly.awakened {
+            filter:
+                drop-shadow(0 0 15px rgba(255,255,255,1))
+                drop-shadow(0 0 35px rgba(255,190,255,.9))
+                drop-shadow(0 0 70px rgba(255,210,150,.7));
+        }
+
+        #butterfly.awakened img { animation-duration: .22s; }
+
+
+
+        /* =========================================================
+           PARTICLES
+        ========================================================= */
+
+        #particles {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 35;
+
+            pointer-events: none;
+        }
+
+        .particle {
+
+            position: absolute;
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            box-shadow:
+                0 0 12px currentColor;
+
+            animation:
+                particleFloat 2s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+
+            from {
+
+                opacity: 1;
+
+                transform:
+                    translate(0, 0)
+                    scale(1);
+
+            }
+
+            to {
+
+                opacity: 0;
+
+                transform:
+                    translate(
+                        var(--x),
+                        var(--y)
+                    )
+                    scale(0);
+
+            }
+
+        }
+
+        /* =========================================================
+           LIVING SKY: BIRDS
+        ========================================================= */
+
+        #birds {
+            position: absolute;
+            inset: 0;
+            z-index: 22;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease;
+            overflow: hidden;
+        }
+
+        .bird {
+            position: absolute;
+            width: clamp(22px, 2.8vw, 38px);
+            height: auto;
+            opacity: .72;
+            will-change: left, top, transform;
+            transition:
+                left var(--bird-time, 17s) linear,
+                top var(--bird-time, 17s) ease-in-out;
+            filter: drop-shadow(0 1px 1px rgba(30,20,15,.12));
+        }
+
+        .bird svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+        .bird path {
+            fill: none;
+            stroke: #30251f;
+            stroke-width: 3.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* =========================================================
+           LIVING FIELD: AMBIENT BUTTERFLIES
+        ========================================================= */
+
+        #ambientButterflies {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 25;
+            opacity: 0;
+            transition: opacity 3s ease;
+            overflow: hidden;
+        }
+
+        .ambient-butterfly {
+            position: absolute;
+            width: clamp(27px, 3.2vw, 43px);
+            height: auto;
+            opacity: .88;
+            transform-origin: center;
+            will-change: left, top, transform;
+            transition:
+                left var(--flight-time, 6s) cubic-bezier(.4,0,.2,1),
+                top var(--flight-time, 6s) cubic-bezier(.4,0,.2,1),
+                transform var(--flight-time, 6s) ease-in-out;
+            filter: drop-shadow(0 1px 5px rgba(70,35,20,.22));
+        }
+
+        .ambient-butterfly img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transform-origin: 50% 50%;
+            animation: dayWingBeat .34s ease-in-out infinite alternate;
+        }
+
+        @keyframes dayWingBeat {
+            from { transform: perspective(150px) rotateY(-28deg) scaleX(.88) scaleY(.95); }
+            to   { transform: perspective(150px) rotateY(28deg) scaleX(1.03) scaleY(1.04); }
+        }
+
+
+
+        /* =========================================================
+           INTERACTIVE OBJECTS
+        ========================================================= */
+
+        #discoveries {
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 3s ease;
+        }
+
+        #discoveries.active { opacity: 1; pointer-events: auto; }
+ .discovery {
+    position: absolute;
+    width: clamp(30px, 3.5vw, 48px);
+    cursor: pointer;
+    transform-origin: center bottom;
+    animation: objectFloat 7s ease-in-out infinite;
+    transition: filter .35s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes objectFloat {
+    0%, 100% { transform: translateY(0) rotate(-0.3deg); }
+    50%      { transform: translateY(-1px) rotate(0.3deg); }
+}
+        .discovery img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 7px rgba(0,0,0,.42)) drop-shadow(0 0 7px rgba(255,255,255,.18));
+        }
+
+        .discovery:hover,
+        .discovery:focus-visible {
+            filter: drop-shadow(0 0 16px rgba(255,220,160,.72));
+            animation-play-state: paused;
+        }
+
+ #letterObject { left: 20%; bottom: 15%; width: clamp(54px, 6.5vw, 86px); }
+        #giftObject   { left: 58.5%; bottom: 25%; width: clamp(80px, 8.2vw, 96px); }
+        #cameraObject { left: 79%; bottom: 20%; width: clamp(52px, 6vw, 80px); }
+
+        @media (max-width: 600px) {
+            #letterObject { left: 16%; bottom: 23%; width: clamp(46px, 11vw, 62px); }
+            #giftObject   { left: 57%; bottom: 24%; width: clamp(42px, 9.5vw, 56px); }
+            #cameraObject { left: 78%; bottom: 21%; width: clamp(44px, 10vw, 58px); }
+        }
+
+
+        /* =========================================================
+           CONTENT PANELS
+        ========================================================= */
+
+        .content-panel {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 200;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            background:
+                rgba(3,4,10,0.78);
+
+            backdrop-filter:
+                blur(15px);
+
+            transition:
+                opacity 0.5s ease;
+        }
+
+        .content-panel.open {
+
+            opacity: 1;
+
+            pointer-events: auto;
+        }
+
+        .panel-card {
+
+            width: min(90vw, 850px);
+
+            max-height: 85vh;
+
+            overflow-y: auto;
+
+            padding:
+                clamp(30px, 5vw, 65px);
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.14),
+                    rgba(255,255,255,0.05)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.15);
+
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.6);
+
+            position: relative;
+        }
+
+        .close {
+
+            position: absolute;
+
+            top: 18px;
+            right: 22px;
+
+            border: none;
+
+            background: transparent;
+
+            color: white;
+
+            font-size: 2rem;
+
+            cursor: pointer;
+
+            opacity: 0.7;
+
+            transition: opacity 0.2s;
+        }
+
+        .close:hover {
+
+            opacity: 1;
+        }
+
+        .panel-card h2 {
+
+            font-size:
+                clamp(2rem, 5vw, 3.5rem);
+
+            font-weight: normal;
+
+            margin-bottom: 30px;
+
+           transform:  
+    translateY(-80px)  
+    scale(0.85);  
+
+filter:  
+    blur(5px);
+
+}
+
+/* =========================================================
+SUN
+========================================================= */
+
+#sun {
+
+position: absolute;  
+
+width: clamp(40px, 5vw, 75px);  
+aspect-ratio: 1;  
+
+border-radius: 50%;  
+
+right: 27%;  
+
+/* Starts below the horizon */  
+top: 32%;  
+
+z-index: 11;  
+
+opacity: 0;  
+
+background:  
+    radial-gradient(  
+        circle,  
+        #fff7bf 0%,  
+        #ffd36b 45%,  
+        #ff9b3d 75%,  
+        #f56a2a 100%  
+    );  
+
+box-shadow:  
+    0 0 35px rgba(255,190,80,0.9),  
+    0 0 90px rgba(255,130,50,0.55),  
+    0 0 180px rgba(255,110,40,0.25);  
+
+transition:  
+    bottom 9s cubic-bezier(.22,.8,.25,1),  
+    opacity 5s ease;
+
+}
+
+/* Sun rises from below */
+
+#sun.rise {
+
+opacity: 1;  
+
+bottom: 17%;
+
+}
+
+        /* =========================================================
            COUPLE
         ========================================================= */
 

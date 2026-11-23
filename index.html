@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>A Little Surprise For You ❤️</title>
+
+    <style>
+
+        /* =========================================================
+           RESET + ROOT
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --night: #030617;
+            --pink: #f3a7c8;
+            --gold: #ffd27a;
+            --warm: #ff9a62;
+            --text: #ffffff;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Georgia, "Times New Roman", serif;
+            background: #000;
+            color: white;
+        }
+
+        /* =========================================================
+           MAIN APP
+        ========================================================= */
+
+        #app {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* =========================================================
+           OPENING SCREEN
+        ========================================================= */
+
+        #intro {
+            position: fixed;
+            inset: 0;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 50% 35%,
+                    #2c1c48 0%,
+                    #100c24 45%,
+                    #03040d 100%
+                );
+
+            z-index: 100;
+        }
+
+        #intro.hidden {
+            animation: introExit 1.5s ease forwards;
+            pointer-events: none;
+        }
+
+        @keyframes introExit {
+            to {
+                opacity: 0;
+                transform: scale(1.08);
+            }
+        }
+
+        /* Intro stars */
+
+        .intro-star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+
+            background: white;
+            border-radius: 50%;
+
+            opacity: 0.5;
+
+            animation: twinkle 3s infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from {
+                opacity: 0.15;
+                transform: scale(0.7);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: scale(1.4);
+            }
+        }
+
+        /* =========================================================
+           BIRTHDAY CARD
+        ========================================================= */
+
+        .birthday-card {
+            width: min(90vw, 470px);
+
+            padding: 55px 35px;
+
+            text-align: center;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.14),
+                    rgba(255,255,255,0.03)
+                );
+
+            border: 1px solid rgba(255,255,255,0.18);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.7),
+                0 0 70px rgba(211,155,255,0.1);
+
+            position: relative;
+            z-index: 2;
+
+            animation: cardFloat 5s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+        }
+
+        .birthday-card h1 {
+
+            font-size: clamp(2.7rem, 7vw, 4.5rem);
+
+            font-weight: normal;
+
+            letter-spacing: 1px;
+
+            color: #fff;
+
+            text-shadow:
+                0 0 20px rgba(255,255,255,0.4);
+
+            margin-bottom: 20px;
+        }
+
+        .birthday-card p {
+
+            font-size: 1.05rem;
+
+            color: rgba(255,255,255,0.75);
+
+            line-height: 1.7;
+
+            margin-bottom: 35px;
+        }
+
+        #enterButton {
+
+            border: none;
+
+            padding: 16px 32px;
+
+            border-radius: 50px;
+
+            cursor: pointer;
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 1rem;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #d57aad,
+                    #8f72d6
+                );
+
+            box-shadow:
+                0 10px 30px rgba(180,100,180,0.35);
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        #enterButton:hover {
+
+            transform: translateY(-3px) scale(1.03);
+
+            box-shadow:
+                0 15px 40px rgba(220,120,200,0.55);
+        }
+
+        /* =========================================================
+           CINEMATIC WORLD
+        ========================================================= */
+
+        #world {
+
+            position: fixed;
+
+            inset: 0;
+
+            overflow: hidden;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            background: #02040d;
+
+            transition: opacity 1.5s ease;
+        }
+
+        #world.active {
+
+            opacity: 1;
+
+            pointer-events: auto;
+        }
+
+        /* =========================================================
+           BACKGROUND LAYERS
+        ========================================================= */
+
+        .scene-background {
+
+            position: absolute;
+
+            inset: -3%;
+
+            width: 106%;
+            height: 106%;
+
+            object-fit: cover;
+
+            pointer-events: none;
+
+            transform-origin: center;
+
+            transition:
+                opacity 8s ease,
+                transform 15s ease,
+                filter 8s ease;
+        }
+
+        #nightField {
+
+            opacity: 1;
+
+            filter:
+                brightness(0.48)
+                saturate(0.55)
+                contrast(1.08);
+        }
+
+        #sunsetField {
+
+            opacity: 0;
+
+            filter:
+                brightness(0.75)
+                saturate(1.05);
+        }
+
+        /* Slow cinematic movement */
+
+        #world.active .scene-background {
+
+            animation: cinematicDrift 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes cinematicDrift {
+
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.045);
+            }
+
+        }
+
+        /* =========================================================
+           NIGHT COLOR OVERLAY
+        ========================================================= */
+
+        #nightOverlay {
+
+            position: absolute;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: 5;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(4,8,35,0.58),
+                    rgba(3,8,28,0.35) 50%,
+                    rgba(1,4,12,0.2)
+                );
+
+            transition: opacity 7s ease;
+        }
+
+        /* =========================================================
+           SUNSET LIGHT
+        ========================================================= */
+
+        #sunsetGlow {
+
+            position: absolute;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            z-index: 6;
+
+            opacity: 0;
+
+            transition: opacity 8s ease;
+
+            background:
+
+                radial-gradient(
+                    circle at 70% 32%,
+                    rgba(255,210,125,0.28),
+                    transparent 25%
+                ),
+
+                linear-gradient(
+                    to bottom,
+                    rgba(255,130,80,0.10),
+                    rgba(255,160,80,0.02)
+                );
+        }
+
+        /* =========================================================
+           STARS
+        ========================================================= */
+
+        #stars {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 10;
+
+            pointer-events: none;
+
+            transition: opacity 5s ease;
+        }
+
+        .star {
+
+            position: absolute;
+
+            width: 2px;
+            height: 2px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            box-shadow:
+                0 0 6px rgba(255,255,255,0.8);
+
+            animation:
+                starTwinkle var(--duration) ease-in-out infinite alternate;
+        }
+
+        @keyframes starTwinkle {
+
+            from {
+
+                opacity: 0.15;
+                transform: scale(0.7);
+
+            }
+
+            to {
+
+                opacity: var(--brightness);
+                transform: scale(1.3);
+
+            }
+
+        }
+
+           /* =========================================================
+MOON + SUN
+========================================================= */
+
+#moon {
+
+position: absolute;  
+
+width: clamp(100px, 14vw, 190px);  
+aspect-ratio: 1;  
+
+border-radius: 50%;  
+
+top: 9%;  
+right: 12%;  
+
+z-index: 12;  
+
+background:  
+    radial-gradient(  
+        circle at 35% 30%,  
+        #ffffff,  
+        #e7e7f2 55%,  
+        #b5b7cc 100%  
+    );  
+
+box-shadow:  
+    0 0 30px rgba(220,225,255,0.55),  
+    0 0 90px rgba(150,170,255,0.25);  
+
+transition:  
+    opacity 7s ease,  
+    transform 9s ease,  
+    filter 7s ease;
+
+}
+
+/* Moon surface */
+
+#moon::before {
+
+content: "";  
+
+position: absolute;  
+
+inset: 0;  
+
+border-radius: 50%;  
+
+opacity: 0.3;  
+
+background:  
+    radial-gradient(  
+        circle at 32% 30%,  
+        transparent 0 7%,  
+        rgba(110,110,130,0.45) 8% 11%,  
+        transparent 12%  
+    ),  
+
+    radial-gradient(  
+        circle at 65% 62%,  
+        rgba(100,100,120,0.4) 0 8%,  
+        transparent 9%  
+    );
+
+}
+
+/* Moon disappears naturally */
+
+#moon.disappear {
+
+opacity: 0;  
+
+transform:  
+    translateY(-80px)  
+    scale(0.85);  
+
+filter:  
+    blur(5px);
+
+}
+
+/* =========================================================
+SUN
+========================================================= */
+
+#sun {
+
+position: absolute;  
+
+width: clamp(40px, 5vw, 75px);  
+aspect-ratio: 1;  
+
+border-radius: 50%;  
+
+right: 27%;  
+
+/* Starts below the horizon */  
+top: 32%;  
+
+z-index: 11;  
+
+opacity: 0;  
+
+background:  
+    radial-gradient(  
+        circle,  
+        #fff7bf 0%,  
+        #ffd36b 45%,  
+        #ff9b3d 75%,  
+        #f56a2a 100%  
+    );  
+
+box-shadow:  
+    0 0 35px rgba(255,190,80,0.9),  
+    0 0 90px rgba(255,130,50,0.55),  
+    0 0 180px rgba(255,110,40,0.25);  
+
+transition:  
+    bottom 9s cubic-bezier(.22,.8,.25,1),  
+    opacity 5s ease;
+
+}
+
+/* Sun rises from below */
+
+#sun.rise {
+
+opacity: 1;  
+
+bottom: 17%;
+
+}
+
+        /* =========================================================
+           COUPLE
+        ========================================================= */
+
+        #couple {
+
+            position: absolute;
+
+            width: clamp(150px, 20vw, 280px);
+
+            left: 50%;
+
+            bottom: 15%;
+
+            transform: translateX(-50%);
+
+            z-index: 20;
+
+            pointer-events: none;
+
+            filter:
+                brightness(0.42)
+                saturate(0.65)
+                contrast(1.1);
+
+            transition:
+                filter 8s ease;
+
+            animation:
+                coupleBreath 7s ease-in-out infinite alternate;
+        }
+
+        @keyframes coupleBreath {
+
+            from {
+                transform:
+                    translateX(-50%)
+                    scale(1);
+            }
+
+            to {
+                transform:
+                    translateX(-50%)
+                    scale(1.012);
+            }
+
+        }
+
+        /* =========================================================
+           MAIN BUTTERFLY
+        ========================================================= */
+
+        #butterfly {
+            position: absolute;
+            width: clamp(42px, 5.2vw, 68px);
+            left: -12%;
+            top: 45%;
+            z-index: 40;
+            cursor: pointer;
+            opacity: 0;
+            transform-origin: center;
+            transform: rotate(-8deg);
+            filter: drop-shadow(0 0 7px rgba(255,255,255,.28));
+            transition:
+                left var(--flight-time, 5s) cubic-bezier(.42,0,.25,1),
+                top var(--flight-time, 5s) cubic-bezier(.42,0,.25,1),
+                transform 1.2s ease,
+                opacity 1s ease,
+                filter 1s ease;
+            touch-action: manipulation;
+            will-change: left, top, transform;
+        }
+
+        #butterfly.visible { opacity: 1; }
+
+        #butterfly img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transform-origin: 50% 50%;
+            animation: mainWingBeat .28s ease-in-out infinite alternate;
+            backface-visibility: visible;
+        }
+
+        @keyframes mainWingBeat {
+            from { transform: perspective(180px) rotateY(-32deg) scaleX(.88) scaleY(.96); }
+            to   { transform: perspective(180px) rotateY(32deg) scaleX(1.04) scaleY(1.03); }
+        }
+
+        #butterfly:hover { filter: drop-shadow(0 0 18px rgba(255,220,255,.8)); }
+
+        #butterfly.awakened {
+            filter:
+                drop-shadow(0 0 15px rgba(255,255,255,1))
+                drop-shadow(0 0 35px rgba(255,190,255,.9))
+                drop-shadow(0 0 70px rgba(255,210,150,.7));
+        }
+
+        #butterfly.awakened img { animation-duration: .22s; }
+
+
+
+        /* =========================================================
+           PARTICLES
+        ========================================================= */
+
+        #particles {
+
+            position: absolute;
+
+            inset: 0;
+
+            z-index: 35;
+
+            pointer-events: none;
+        }
+
+        .particle {
+
+            position: absolute;
+
+            width: 5px;
+            height: 5px;
+
+            border-radius: 50%;
+
+            background: white;
+
+            box-shadow:
+                0 0 12px currentColor;
+
+            animation:
+                particleFloat 2s ease-out forwards;
+        }
+
+        @keyframes particleFloat {
+
+            from {
+
+                opacity: 1;
+
+                transform:
+                    translate(0, 0)
+                    scale(1);
+
+            }
+
+            to {
+
+                opacity: 0;
+
+                transform:
+                    translate(
+                        var(--x),
+                        var(--y)
+                    )
+                    scale(0);
+
+            }
+
+        }
+
+        /* =========================================================
+           LIVING SKY: BIRDS
+        ========================================================= */
+
+        #birds {
+            position: absolute;
+            inset: 0;
+            z-index: 22;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 3s ease;
+            overflow: hidden;
+        }
+
+        .bird {
+            position: absolute;
+            width: clamp(22px, 2.8vw, 38px);
+            height: auto;
+            opacity: .72;
+            will-change: left, top, transform;
+            transition:
+                left var(--bird-time, 17s) linear,
+                top var(--bird-time, 17s) ease-in-out;
+            filter: drop-shadow(0 1px 1px rgba(30,20,15,.12));
+        }
+
+        .bird svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+        .bird path {
+            fill: none;
+            stroke: #30251f;
+            stroke-width: 3.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* =========================================================
+           LIVING FIELD: AMBIENT BUTTERFLIES
+        ========================================================= */
+
+        #ambientButterflies {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 25;
+            opacity: 0;
+            transition: opacity 3s ease;
+            overflow: hidden;
+        }
+
+        .ambient-butterfly {
+            position: absolute;
+            width: clamp(27px, 3.2vw, 43px);
+            height: auto;
+            opacity: .88;
+            transform-origin: center;
+            will-change: left, top, transform;
+            transition:
+                left var(--flight-time, 6s) cubic-bezier(.4,0,.2,1),
+                top var(--flight-time, 6s) cubic-bezier(.4,0,.2,1),
+                transform var(--flight-time, 6s) ease-in-out;
+            filter: drop-shadow(0 1px 5px rgba(70,35,20,.22));
+        }
+
+        .ambient-butterfly img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transform-origin: 50% 50%;
+            animation: dayWingBeat .34s ease-in-out infinite alternate;
+        }
+
+        @keyframes dayWingBeat {
+            from { transform: perspective(150px) rotateY(-28deg) scaleX(.88) scaleY(.95); }
+            to   { transform: perspective(150px) rotateY(28deg) scaleX(1.03) scaleY(1.04); }
+        }
+
+
+
+        /* =========================================================
+           INTERACTIVE OBJECTS
+        ========================================================= */
+
+        #discoveries {
+            position: absolute;
+            inset: 0;
+            z-index: 50;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 3s ease;
+        }
+
+        #discoveries.active { opacity: 1; pointer-events: auto; }
+ .discovery {
+    position: absolute;
+    width: clamp(30px, 3.5vw, 48px);
+    cursor: pointer;
+    transform-origin: center bottom;
+    animation: objectFloat 7s ease-in-out infinite;
+    transition: filter .35s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes objectFloat {
+    0%, 100% { transform: translateY(0) rotate(-0.3deg); }
+    50%      { transform: translateY(-1px) rotate(0.3deg); }
+}
+        .discovery img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 7px rgba(0,0,0,.42)) drop-shadow(0 0 7px rgba(255,255,255,.18));
+        }
+
+        .discovery:hover,
+        .discovery:focus-visible {
+            filter: drop-shadow(0 0 16px rgba(255,220,160,.72));
+            animation-play-state: paused;
+        }
+
+ #letterObject { left: 20%; bottom: 15%; width: clamp(54px, 6.5vw, 86px); }
+        #giftObject   { left: 58.5%; bottom: 25%; width: clamp(80px, 8.2vw, 96px); }
+        #cameraObject { left: 79%; bottom: 20%; width: clamp(52px, 6vw, 80px); }
+
+        @media (max-width: 600px) {
+            #letterObject { left: 16%; bottom: 23%; width: clamp(46px, 11vw, 62px); }
+            #giftObject   { left: 57%; bottom: 24%; width: clamp(42px, 9.5vw, 56px); }
+            #cameraObject { left: 78%; bottom: 21%; width: clamp(44px, 10vw, 58px); }
+        }
+
+
+        /* =========================================================
+           CONTENT PANELS
+        ========================================================= */
+
+        .content-panel {
+
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 200;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            background:
+                rgba(3,4,10,0.78);
+
+            backdrop-filter:
+                blur(15px);
+
+            transition:
+                opacity 0.5s ease;
+        }
+
+        .content-panel.open {
+
+            opacity: 1;
+
+            pointer-events: auto;
+        }
+
+        .panel-card {
+
+            width: min(90vw, 850px);
+
+            max-height: 85vh;
+
+            overflow-y: auto;
+
+            padding:
+                clamp(30px, 5vw, 65px);
+
+            border-radius: 30px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.14),
+                    rgba(255,255,255,0.05)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.15);
+
+            box-shadow:
+                0 30px 100px rgba(0,0,0,0.6);
+
+            position: relative;
+        }
+
+        .close {
+
+            position: absolute;
+
+            top: 18px;
+            right: 22px;
+
+            border: none;
+
+            background: transparent;
+
+            color: white;
+
+            font-size: 2rem;
+
+            cursor: pointer;
+
+            opacity: 0.7;
+
+            transition: opacity 0.2s;
+        }
+
+        .close:hover {
+
+            opacity: 1;
+        }
+
+        .panel-card h2 {
+
+            font-size:
+                clamp(2rem, 5vw, 3.5rem);
+
+            font-weight: normal;
+
+            margin-bottom: 30px;
+
+            color: #ffe0ea;
+        }
+
+        .panel-card p {
+
+            font-size:
+                clamp(1rem, 2vw, 1.2rem);
+
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        /* Hide the old combined moon/sun element */
+        #celestialBody {
+            display: none;
+        }
+
+        /* =========================================================
+           MOON
+        ========================================================= */
+
+        #moon {
+            position: absolute;
+            width: clamp(100px, 14vw, 190px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            top: 7%;
+            right: 12%;
+            z-index: 12;
+
+            background: radial-gradient(
+                circle at 35% 30%,
+                #ffffff,
+                #e7e7f2 55%,
+                #b5b7cc 100%
+            );
+
+            box-shadow:
+                0 0 30px rgba(220,225,255,.55),
+                0 0 90px rgba(150,170,255,.25);
+
+            transition:
+                opacity 7s ease,
+                transform 9s ease,
+                filter 7s ease;
+        }
+
+        #moon.disappear {
+            opacity: 0;
+            transform: translateY(-80px) scale(.85);
+            filter: blur(5px);
+        }
+
+        /* =========================================================
+           SUN
+        ========================================================= */
+
+        #sun {
+            position: absolute;
+            width: clamp(70px, 9vw, 130px);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            right: 12%;
+            bottom: -200px;
+            z-index: 11;
+            opacity: 0;
+
+            background: radial-gradient(
+                circle,
+                #fff7bf,
+                #ffd36b 45%,
+                #ff9b3d 75%,
+                #f56a2a
+            );
+
+            box-shadow:
+                0 0 35px rgba(255,190,80,.9),
+                0 0 90px rgba(255,130,50,.55),
+                0 0 180px rgba(255,110,40,.25);
+
+            transition:
+                bottom 9s cubic-bezier(.22,.8,.25,1),
+                opacity 5s ease;
+        }
+
+        #sun.rise {
+            opacity: 1;
+            bottom: 17%;
+        }
+
+        /* Sunset state */
+
+        #world.sunset #nightField {
+            opacity: 0;
+        }
+
+        #world.sunset #sunsetField {
+            opacity: 1;
+        }
+
+        #world.sunset #nightOverlay {
+            opacity: 0;
+        }
+
+        #world.sunset #sunsetGlow {
+            opacity: 1;
+        }
+
+        #world.sunset #stars {
+            opacity: 0;
+        }
+
+        #world.sunset #couple {
+            filter: brightness(.85) saturate(.9);
+        }
+
+        #world.sunset #birds,
+        #world.sunset #ambientButterflies {
+            opacity: 1;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media(max-width:600px) {
+
+            .birthday-card {
+                padding: 40px 22px;
+            }
+
+            #moon {
+                right: 12%;
+                width: 105px;
+            }
+
+            #sun {
+                right: 12%;
+                width: 85px;
+            }
+
+            #couple {
+                width: 190px;
+            }
+
+            .discovery {
+                width: 65px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- INTRO SCREEN -->
+
+    <section id="intro">
+
+        <div class="birthday-card">
+
+            <h1>Happy Birthday ❤️</h1>
+
+            <p>
+                A little world, a little surprise,
+                and something made just for you.
+            </p>
+
+            <button id="enterButton">
+                Enter your little world ✨
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- MAIN WORLD -->
+
+    <main id="world">
+
+        <!-- Background images -->
+
+        <img
+            id="nightField"
+            class="scene-background"
+            src="Images/WhatsApp Image 2026-11-24 at 1.21.56 AM.jpeg"
+            alt=""
+        >
+
+        <img
+            id="sunsetField"
+            class="scene-background"
+            src="Images/WhatsApp Image 2026-11-24 at 1.21.56 AM (1).jpeg"
+            alt=""
+        >
+
+        <div id="nightOverlay"></div>
+
+        <div id="sunsetGlow"></div>
+
+        <!-- Sky -->
+
+        <div id="stars"></div>
+
+        <div id="moon"></div>
+
+        <div id="sun"></div>
+
+        <!-- Couple -->
+
+        <img
+            id="couple"
+            src="couple.png"
+            alt=""
+        >
+
+        <!-- Main butterfly -->
+
+        <div id="butterfly">
+
+            <img
+                src="Images/nigbutfly.png.png"
+                alt="Butterfly"
+            >
+
+        </div>
+
+        <!-- Particles -->
+
+        <div id="particles"></div>
+
+        <!-- Birds -->
+
+        <div id="birds"></div>
+
+        <!-- Ambient butterflies -->
+
+        <div id="ambientButterflies"></div>
+
+        <!-- Discoverable objects -->
+
+        <div id="discoveries">
+
+            <div
+                class="discovery"
+                id="letterObject"
+                data-panel="letterPanel"
+            >
+                <img src="Images/letter.png.png" alt="Letter">
+            </div>
+
+            <div
+                class="discovery"
+                id="cameraObject"
+                data-panel="cameraPanel"
+            >
+                <img src="Images/cam.png.png" alt="Camera">
+            </div>
+
+            <div
+                class="discovery"
+                id="giftObject"
+                data-panel="giftPanel"
+            >
+                <img src="Images/giftbox.png.png" alt="Gift">
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- LETTER PANEL -->
+
+    <section class="content-panel" id="letterPanel">
+
+        <div class="panel-card">
+
+            <button class="close">&times;</button>
+
+            <h2>A Letter For You ❤️</h2>
+
+            <p>
+                My favourite person,
+
+                <br><br>
+
+                There are things that words sometimes
+                struggle to express.
+
+                <br><br>
+
+                But today, I wanted to create something
+                that reminds you how special you are.
+
+                <br><br>
+
+                Happy Birthday. ❤️
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- CAMERA PANEL -->
+
+    <section class="content-panel" id="cameraPanel">
+
+        <div class="panel-card">
+
+            <button class="close">&times;</button>
+
+            <h2>Our Little Memories</h2>
+
+            <p>
+                Every memory deserves a place.
+                Add your favourite pictures here.
+            </p>
+
+            <input
+                type="file"
+                id="photoInput"
+                accept="image/*"
+                multiple
+            >
+
+            <div
+                id="photoGallery"
+                style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+                    gap:15px;
+                    margin-top:25px;
+                "
+            ></div>
+
+        </div>
+
+    </section>
+
+    <!-- GIFT PANEL -->
+
+    <section class="content-panel" id="giftPanel">
+
+        <div class="panel-card">
+
+            <button class="close">&times;</button>
+
+            <h2>A Little Gift 🎁</h2>
+
+            <p>
+                Some gifts cannot be wrapped.
+
+                <br><br>
+
+                Some are simply moments,
+                memories and the people
+                who make life beautiful.
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const enterButton = document.getElementById("enterButton");
+
+const intro = document.getElementById("intro");
+
+const world = document.getElementById("world");
+
+const butterfly = document.getElementById("butterfly");
+
+const moon = document.getElementById("moon");
+
+const sun = document.getElementById("sun");
+
+const discoveries = document.getElementById("discoveries");
+
+const particles = document.getElementById("particles");
+
+/* =========================================================
+   CREATE STARS
+========================================================= */
+
+const stars = document.getElementById("stars");
+
+for (let i = 0; i < 100; i++) {
+
+    const star = document.createElement("div");
+
+    star.className = "star";
+
+    star.style.left = Math.random() * 100 + "%";
+
+    star.style.top = Math.random() * 65 + "%";
+
+    star.style.setProperty(
+        "--duration",
+        (2 + Math.random() * 4) + "s"
+    );
+
+    star.style.setProperty(
+        "--brightness",
+        0.4 + Math.random() * 0.6
+    );
+
+    stars.appendChild(star);
+
+}
+
+/* =========================================================
+   ENTER WORLD
+========================================================= */
+
+let butterflyAwakened = false;
+let mainButterflyTimer = null;
+let mainButterflyStarted = false;
+
+enterButton.addEventListener("click", () => {
+    intro.classList.add("hidden");
+    world.classList.add("active");
+
+    setTimeout(() => { intro.style.display = "none"; }, 1500);
+
+    // Enter gently, then keep wandering instead of stopping in the centre.
+    setTimeout(() => {
+        butterfly.classList.add("visible");
+        butterfly.style.setProperty("--flight-time", "5.5s");
+        butterfly.style.left = "18%";
+        butterfly.style.top = "43%";
+        mainButterflyStarted = true;
+        setTimeout(moveMainButterfly, 5600);
+    }, 1800);
+});
+
+function moveMainButterfly() {
+    if (!mainButterflyStarted || butterflyAwakened || !world.classList.contains("active")) return;
+
+    const x = 9 + Math.random() * 72;
+    const y = 17 + Math.random() * 48;
+    const duration = 4.2 + Math.random() * 3.8;
+    const currentX = parseFloat(butterfly.style.left) || 18;
+    const tilt = x >= currentX ? 9 : -9;
+
+    butterfly.style.setProperty("--flight-time", duration + "s");
+    butterfly.style.transform = `rotate(${tilt}deg) scale(${.92 + Math.random() * .16})`;
+    butterfly.style.left = x + "%";
+    butterfly.style.top = y + "%";
+
+    mainButterflyTimer = setTimeout(() => {
+        if (butterflyAwakened) return;
+        // Brief natural hover, but never a long stationary stop.
+        mainButterflyTimer = setTimeout(moveMainButterfly, 350 + Math.random() * 950);
+    }, duration * 1000);
+}
+
+butterfly.addEventListener("click", () => {
+    if (butterflyAwakened) return;
+    butterflyAwakened = true;
+    mainButterflyStarted = false;
+    clearTimeout(mainButterflyTimer);
+    butterfly.classList.add("awakened");
+
+    const rect = butterfly.getBoundingClientRect();
+    createParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 35);
+
+    // A deliberate final flight before the scene changes.
+    butterfly.style.setProperty("--flight-time", "4.2s");
+    butterfly.style.left = "76%";
+    butterfly.style.top = "14%";
+    butterfly.style.transform = "rotate(8deg) scale(.94)";
+
+    setTimeout(() => { butterfly.style.opacity = "0"; }, 4200);
+    setTimeout(startSunset, 5200);
+});
+
+
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+function createParticles(x, y, amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        const particle = document.createElement("div");
+
+        particle.className = "particle";
+
+        particle.style.left = x + "px";
+
+        particle.style.top = y + "px";
+
+        particle.style.setProperty(
+            "--x",
+            (Math.random() - 0.5) * 200 + "px"
+        );
+
+        particle.style.setProperty(
+            "--y",
+            (Math.random() - 0.5) * 200 + "px"
+        );
+
+        particles.appendChild(particle);
+
+        setTimeout(() => {
+
+            particle.remove();
+
+        }, 2000);
+
+    }
+
+}
+
+/* =========================================================
+   SUNSET TRANSITION
+========================================================= */
+
+let sunsetStarted = false;
+
+function startSunset() {
+
+    if (sunsetStarted) return;
+
+    sunsetStarted = true;
+
+    // Start background transition
+
+    world.classList.add("sunset");
+
+    // Moon disappears
+
+    moon.classList.add("disappear");
+
+    // Sun rises independently
+
+    sun.classList.add("rise");
+
+    // Start recurring wildlife after the sunset has begun.
+    setTimeout(startBirdLoop, 2600);
+    setTimeout(startAmbientButterflyLoop, 3600);
+
+    // Reveal interactive objects
+
+    setTimeout(() => {
+
+        discoveries.classList.add("active");
+
+    }, 8000);
+
+}
+
+/* =========================================================
+   CONTINUOUS BIRD FLIGHTS
+========================================================= */
+
+let birdLoopStarted = false;
+
+function startBirdLoop() {
+    if (birdLoopStarted) return;
+    birdLoopStarted = true;
+    spawnBirdFlock();
+}
+
+function spawnBirdFlock() {
+    if (!sunsetStarted) return;
+
+    const container = document.getElementById("birds");
+    const count = 2 + Math.floor(Math.random() * 3);
+    // The sun sits toward the right side of the sunset image. Most flocks
+    // travel toward it; occasional flocks cross in the opposite direction.
+    const direction = Math.random() < .68 ? 1 : -1;
+    const startX = direction === 1 ? -7 : 107;
+
+    for (let i = 0; i < count; i++) {
+        const bird = document.createElement("div");
+        bird.className = "bird";
+        bird.innerHTML = '<svg viewBox="0 0 48 28" aria-hidden="true"><path d="M2 19 Q12 3 24 17 Q36 3 46 19" /></svg>';
+        const startY = 13 + Math.random() * 27 + i * 1.1;
+        const endY = Math.max(9, Math.min(46, startY + (Math.random() - .5) * 13));
+        const duration = 15 + Math.random() * 12;
+        const endX = direction === 1 ? 108 : -9;
+
+        bird.style.left = startX + "%";
+        bird.style.top = startY + "%";
+        bird.style.width = (22 + Math.random() * 15) + "px";
+        bird.style.opacity = (.48 + Math.random() * .28).toFixed(2);
+        bird.style.setProperty("--bird-time", duration + "s");
+        if (direction < 0) bird.style.transform = "scaleX(-1)";
+        container.appendChild(bird);
+
+        // Force the browser to register the starting point before flight.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            bird.style.left = endX + "%";
+            bird.style.top = endY + "%";
+        }));
+        setTimeout(() => bird.remove(), duration * 1000 + 500);
+    }
+
+    // Small flocks keep arriving throughout the sunset scene.
+    setTimeout(spawnBirdFlock, 5200 + Math.random() * 5200);
+}
+
+/* =========================================================
+   CONTINUOUS AMBIENT BUTTERFLIES
+========================================================= */
+
+let ambientButterflyLoopStarted = false;
+
+function startAmbientButterflyLoop() {
+    if (ambientButterflyLoopStarted) return;
+    ambientButterflyLoopStarted = true;
+
+    // Stagger the first arrivals so they do not appear as a row of stickers.
+    for (let i = 0; i < 3; i++) {
+        setTimeout(spawnAmbientButterfly, i * (900 + Math.random() * 900));
+    }
+    setTimeout(spawnAmbientButterfly, 4200);
+}
+
+function spawnAmbientButterfly() {
+    if (!sunsetStarted) return;
+
+    const container = document.getElementById("ambientButterflies");
+    const existing = container.querySelectorAll(".ambient-butterfly").length;
+    if (existing < 6) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "ambient-butterfly";
+        const img = document.createElement("img");
+        img.src = "Images/daybutfly.png.png";
+        img.alt = "";
+        wrapper.appendChild(img);
+
+        let x = 8 + Math.random() * 82;
+        let y = 38 + Math.random() * 43;
+        wrapper.style.left = x + "%";
+        wrapper.style.top = y + "%";
+        wrapper.style.width = (27 + Math.random() * 17) + "px";
+        wrapper.style.opacity = (.66 + Math.random() * .28).toFixed(2);
+        container.appendChild(wrapper);
+
+        let alive = true;
+        const lifetime = 30000 + Math.random() * 18000;
+        const startedAt = Date.now();
+
+        function wander() {
+            if (!alive || !wrapper.isConnected || !sunsetStarted) return;
+            if (Date.now() - startedAt > lifetime) {
+                alive = false;
+                wrapper.style.opacity = "0";
+                setTimeout(() => wrapper.remove(), 1200);
+                return;
+            }
+
+            const nextX = Math.max(3, Math.min(91, x + (Math.random() - .48) * 28));
+            const nextY = Math.max(32, Math.min(82, y + (Math.random() - .5) * 22));
+            const duration = 3.8 + Math.random() * 4.8;
+            const dx = nextX - x;
+            wrapper.style.setProperty("--flight-time", duration + "s");
+            wrapper.style.transform = `rotate(${dx >= 0 ? 8 : -8}deg) scale(${.9 + Math.random() * .18})`;
+            wrapper.style.left = nextX + "%";
+            wrapper.style.top = nextY + "%";
+            x = nextX;
+            y = nextY;
+            setTimeout(wander, duration * 1000 + 250 + Math.random() * 700);
+        }
+
+        setTimeout(wander, 500 + Math.random() * 900);
+    }
+
+    // Keep the scene populated without overcrowding it.
+    setTimeout(spawnAmbientButterfly, 4800 + Math.random() * 4200);
+}
+
+
+
+/* =========================================================
+   DISCOVERY OBJECTS
+========================================================= */
+
+document.querySelectorAll(".discovery").forEach(object => {
+
+    object.addEventListener("click", () => {
+
+        const panelId = object.dataset.panel;
+
+        document
+            .getElementById(panelId)
+            .classList.add("open");
+
+    });
+
+});
+
+/* =========================================================
+   CLOSE PANELS
+========================================================= */
+
+document.querySelectorAll(".close").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        button
+            .closest(".content-panel")
+            .classList.remove("open");
+
+    });
+
+});
+
+/* =========================================================
+   PHOTO GALLERY
+========================================================= */
+
+const photoInput = document.getElementById("photoInput");
+
+const photoGallery = document.getElementById("photoGallery");
+
+photoInput.addEventListener("change", event => {
+
+    const files = event.target.files;
+
+    for (const file of files) {
+
+        if (!file.type.startsWith("image/")) continue;
+
+        const image = document.createElement("img");
+
+        image.src = URL.createObjectURL(file);
+
+        image.style.width = "100%";
+
+        image.style.borderRadius = "12px";
+
+        photoGallery.appendChild(image);
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
